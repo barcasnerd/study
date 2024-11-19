@@ -1,6 +1,7 @@
 function isMutant(dna: string[]): boolean {
     dna = validateDNA(dna);
     let found = [...findVerticalAndHorizontal(dna), ...findDiagonal(dna)]
+    console.log(found);
     return found.length > 1 ? true : false;
 }
 
@@ -8,20 +9,32 @@ function findDiagonal(matrix: string[]): string[] {
     let result: string[] = [];
     for (let i = 0; i < matrix.length; i++) {
         let mainWord: string | null = ""
+        let _2ndTraversalmainWord: string | null = ""
         let secondaryWord: string | null = ""
+        let _2ndTraversalsecondaryWord: string | null = ""
         let k = 0;
         for (let j = matrix.length - i - 1; j < matrix[i].length; j++) {
             mainWord += matrix[j][k]
+            _2ndTraversalmainWord += matrix[j][matrix.length - k - 1]
             secondaryWord += matrix[k][j]
+            _2ndTraversalsecondaryWord += matrix[matrix.length - k - 1][j]
             k++;
         }
         mainWord = findValidSequence(mainWord);
+        _2ndTraversalmainWord = findValidSequence(_2ndTraversalmainWord);
         secondaryWord = findValidSequence(secondaryWord);
+        _2ndTraversalsecondaryWord = findValidSequence(_2ndTraversalsecondaryWord);
         if (mainWord !== null) {
             result.push(mainWord);
         }
+        if (_2ndTraversalmainWord !== null && !result.find(el => el === _2ndTraversalmainWord)) {
+            result.push(_2ndTraversalmainWord);
+        }
         if (secondaryWord !== null && !result.find(el => el === secondaryWord)) {
             result.push(secondaryWord);
+        }
+        if (_2ndTraversalsecondaryWord !== null && !result.find(el => el === _2ndTraversalsecondaryWord)) {
+            result.push(_2ndTraversalsecondaryWord);
         }
     }
     return result;
@@ -78,9 +91,9 @@ try {
         "ATGCGA",
         "CAGTGC",
         "TTATGT",
-        "AGAAGG",
-        "CCCCTA",
-        "TCACTG"
+        "AGAATG",
+        "CCCTTA",
+        "TCTCTG"
     ]));
 } catch (e: any) {
     console.log(e.message);
